@@ -26,7 +26,7 @@ function outputLoginForm($message) {
 
 try {
     // load user from session
-    $user = !empty($_SESSION['user']) ? $_SESSION['user'] : false;
+    $user = getSessionUser();
     
     if (!$user) {
         if (empty($_REQUEST['username'])) {
@@ -57,7 +57,8 @@ try {
     } else { // login successful
         // store the user in the session
         $_SESSION['user'] = $user;
-        echo "Welcome " .$user['preferred_name']. " you are logged in";
+        echo "Welcome " .$user['preferred_name']. " you are logged in <br />";
+        echo "<a href='./blog'>Create a blog post</a>";
     }
 } catch (Exception $e) {
     outputLoginForm('<div class="error">There was an error that caused login to fail</div>');

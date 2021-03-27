@@ -165,3 +165,15 @@ function validateLogin($db, $username, $password, $debug = false) {
     }
     return false;
 }
+
+function getSessionUser() {
+    return !empty($_SESSION['user']) ? $_SESSION['user'] : false;
+}
+
+function loginRequired() {
+    $user = getSessionUser();
+    if (!$user) {
+        header("Location: ../login.html");
+        return; // not needed but you never know
+    }
+}
