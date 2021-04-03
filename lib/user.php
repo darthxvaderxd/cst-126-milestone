@@ -48,6 +48,10 @@ function registerUser($db, $request, $debug = false) {
     return false;
 }
 
+function isAdmin($user) {
+    return true;
+}
+
 function getUserByUsername($db, $username, $debug = false) {
     try {
         $sql = "SELECT user_id, user_name, password, role_id, nick_name, first_name, last_name, middle_name, email, address1, address2, city, state, postal_code, country, banned, deleted "
@@ -98,6 +102,59 @@ function getUserByUsername($db, $username, $debug = false) {
         }
     }
 
+    return null;
+}
+
+function getUserById($db, $id, $debug = false) {
+    try {
+        $sql = "SELECT user_id, user_name, password, role_id, nick_name, first_name, last_name, middle_name, email, address1, address2, city, state, postal_code, country, banned, deleted "
+            . "FROM users WHERE user_id = ? ";
+            
+            $stmt = $db->prepare($sql);
+            if ($stmt) {
+                // Sanitize the post params to stop sql injection
+                $stmt->bind_param("i", $id);
+                $stmt->execute();
+                
+                $stmt->bind_result($user_id, $user_name, $password, $role_id, $nick_name, $first_name, $last_name, $middle_name, $email, $address1, $adress2, $city, $state, $postal_code, $country, $banned, $deleted);
+                $stmt->fetch();
+                
+                $db->close();
+                // found user
+                if ($user_id) {
+                    return [
+                        'user_id' => $user_id,
+                        'user_name' => $user_name,
+                        'password' => $password,
+                        'role_id' => $role_id,
+                        // set preferred name
+                        'preferred_name' => $nick_name ? $nick_name : $first_name,
+                        'nick_name' => $nick_name,
+                        'first_name' => $first_name,
+                        'last_name' => $last_name,
+                        'middle_name' => $middle_name,
+                        'email' => $email,
+                        'address1' => $address1,
+                        'adress2' => $adress2,
+                        'city' => $city,
+                        'state' => $state,
+                        'postal_code' => $postal_code,
+                        'country' => $country,
+                        'banned' => $banned,
+                        'deleted' => $deleted,
+                    ];
+                }
+            } else {
+                if ($debug) {
+                    echo $db->errno . ' ' . $db->error;
+                }
+            }
+    } catch (Exception $e) {
+        if ($debug) {
+            echo "<!-- " .print_r($e, true). "-->";
+        }
+    }
+    
     return null;
 }
 

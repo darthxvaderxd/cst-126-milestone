@@ -30,6 +30,7 @@ try {
     
     $title = $_REQUEST['title'];
     $body = $_REQUEST['body'];
+    $tags = $_REQUEST['tags'];
     
     if (empty($title) || empty($body)) {
         $error = "You need a blog title and post to continue.";
@@ -49,8 +50,15 @@ try {
             }
         }
     }
+    
+    // make tags an array
+    if (!empty($tags)) {
+        $tags = explode(",", $tags);
+    } else {
+        $tags = [];
+    }
 
-    saveBlogPost($user, $title, $body, $debug);
+    saveBlogPost($user, $title, $body, $tags, $debug);
 } catch (Exception $e) {
     $error = "There was an error that occured";
     if ($debug) {
@@ -63,4 +71,6 @@ if (!empty($error)) {
     return;
 }
 
+// rejoin them
+$tags = join(",", $tags);
 include './blog/display.php';

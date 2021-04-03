@@ -38,6 +38,10 @@
     				<textarea name="body" id="body"><?php echo $body ?? ""; ?></textarea>
     			</div>
     			<div>
+    				<label for="tags">Tags: </label>
+    				<input type="text" id="tags" name="tags" value="<?php echo $tags ?? ""; ?>" />
+    			</div>
+    			<div>
     				<input type="submit" value="Post" />
     			</div>
     		</div>

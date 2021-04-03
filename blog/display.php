@@ -37,6 +37,10 @@
     			<div>
     				<?php echo $body ?? ""; ?>
     			</div>
+    			<div>
+    				<label for="tags">Tags: </label>
+    				<?php echo $tags ?? ""; ?>
+    			</div>
     		</div>
 		</form>
 	</body>
